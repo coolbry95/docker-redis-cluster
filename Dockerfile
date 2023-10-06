@@ -1,5 +1,7 @@
 # Build based on redis:6.0 from 2020-05-05
-FROM redis@sha256:f7ee67d8d9050357a6ea362e2a7e8b65a6823d9b612bc430d057416788ef6df9
+#ARG TAG=sha256:f7ee67d8d9050357a6ea362e2a7e8b65a6823d9b612bc430d057416788ef6df9
+ARG TAG=sha256:14681867623c6ef93c66ed5c3e625862ddcea87017a9d76096cf2ed69c15ab5b
+FROM redis@$TAG
 
 LABEL maintainer="Johan Andersson <Grokzen@gmail.com>"
 
@@ -10,7 +12,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install system dependencies
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -yqq \
-      net-tools supervisor ruby rubygems locales gettext-base wget gcc make g++ build-essential libc6-dev tcl && \
+      net-tools supervisor ruby rubygems locales gettext-base wget gcc make g++ build-essential libc6-dev tcl pkg-config && \
     apt-get clean -yqq
 
 # # Ensure UTF-8 lang and locale
@@ -24,14 +26,14 @@ ENV SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
 RUN gem install redis -v 4.1.3
 
 # This will always build the latest release/commit in the 6.0 branch
-ARG redis_version=7.0
-
-RUN wget -qO redis.tar.gz https://github.com/redis/redis/tarball/${redis_version} \
-    && tar xfz redis.tar.gz -C / \
-    && mv /redis-* /redis
-
-RUN (cd /redis && make)
-
+#ARG redis_version=7.2.1
+#
+#RUN wget -qO redis.tar.gz https://github.com/redis/redis/tarball/${redis_version} \
+#    && tar xfz redis.tar.gz -C / \
+#    && mv /redis-* /redis
+#
+#RUN (cd /redis && make)
+#
 RUN mkdir /redis-conf && mkdir /redis-data
 
 COPY redis-cluster.tmpl /redis-conf/redis-cluster.tmpl

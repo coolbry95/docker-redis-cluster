@@ -8,7 +8,8 @@ program_entry_template ()
   echo "
 
 [program:redis-$count]
-command=/redis/src/redis-server /redis-conf/$port/redis.conf
+#command=/redis/src/redis-server /redis-conf/$port/redis.conf
+command=/usr/local/bin/redis-server /redis-conf/$port/redis.conf
 stdout_logfile=/var/log/supervisor/%(program_name)s.log
 stderr_logfile=/var/log/supervisor/%(program_name)s.log
 autorestart=true

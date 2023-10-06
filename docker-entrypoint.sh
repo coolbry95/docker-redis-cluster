@@ -80,7 +80,8 @@ if [ "$1" = 'redis-cluster' ]; then
     ## Check the version of redis-cli and if we run on a redis server below 5.0
     ## If it is below 5.0 then we use the redis-trib.rb to build the cluster
     #
-    /redis/src/redis-cli --version | grep -E "redis-cli 3.0|redis-cli 3.2|redis-cli 4.0"
+    #/redis/src/redis-cli --version | grep -E "redis-cli 3.0|redis-cli 3.2|redis-cli 4.0"
+     /usr/local/bin/redis-cli --version | grep -E "redis-cli 3.0|redis-cli 3.2|redis-cli 4.0"
 
     if [ $? -eq 0 ]
     then
@@ -88,7 +89,7 @@ if [ "$1" = 'redis-cluster' ]; then
       echo "yes" | eval ruby /redis/src/redis-trib.rb create --replicas "$SLAVES_PER_MASTER" "$nodes"
     else
       echo "Using redis-cli to create the cluster"
-      echo "yes" | eval /redis/src/redis-cli --cluster create --cluster-replicas "$SLAVES_PER_MASTER" "$nodes"
+      echo "yes" | eval /usr/local/bin/redis-cli --cluster create --cluster-replicas "$SLAVES_PER_MASTER" "$nodes"
     fi
 
     if [ "$SENTINEL" = "true" ]; then
